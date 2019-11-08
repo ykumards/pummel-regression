@@ -48,8 +48,9 @@ do_bn: True
 model_verbose: True
 
 # switch this to True to use intra-visit adder instead of 1x1 conv
-use_adder: False 
-use_mh_attn: True
+use_adder: True 
+# Switch this to turn off mh-attention aggregate
+use_mh_attn: False
 
 # train:
 # https://stackoverflow.com/questions/30458977/yaml-loads-5e-6-as-string-and-not-a-number
