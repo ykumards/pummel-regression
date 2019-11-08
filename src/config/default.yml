@@ -1,0 +1,66 @@
+# experiment:
+seed: 123
+disable_cuda: False
+device: 'cuda'
+num_workers: 10
+alpha: 0.98 # smoothing constant for exponential moving average
+log_interval: 100
+exp_name: "Final_NeuripsLSTM_v1_rnn_conv_mhattn_pe_200k"
+exp_dir: "../experiments/"
+num_samples: 200000
+logdir: '../logs/lstm-'
+debug: True
+run_pdb: False
+num_workers: 1
+
+# dataset
+shuffle: True
+datapath: '../input/'
+data_filename: 'NLPized_data_2014_to_2016_w_split_seq.csv'
+# data_filename: 'tiny_sample.csv',
+save_dir: "../output/"
+max_seq_length: 300
+max_diag_length_per_visit: 50
+topcap: 25
+train_size: 0.7
+val_size: 0.15
+test_size: 0.15
+include_timedels: True
+include_features: True
+all_input_zeros: False
+
+# Embeddings
+pretrained_embeddings: None
+embedding_dim: 300
+
+# model:
+## transformer
+num_trans_layers: 8
+num_trans_heads: 8
+trans_dim_feedforward: 2048
+## rnn
+rnn_hidden_size: 800
+time_rnn_hidden_size: 8
+hidden_size: 16
+num_layers: 2
+dropout_p: 0.3
+do_bn: True
+model_verbose: True
+
+# switch this to True to use intra-visit adder instead of 1x1 conv
+use_adder: False 
+use_mh_attn: True
+
+# train:
+# https://stackoverflow.com/questions/30458977/yaml-loads-5e-6-as-string-and-not-a-number
+num_epochs: 30
+es_criteria: 8
+reduce_lr_criteria: 3
+es_threshold: 0.005
+learning_rate: 3.e-4
+batch_size: 32
+weight_decay: 0.0001
+
+# post-process
+is_draw_polygon: True
+do_infer: True
