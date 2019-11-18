@@ -21,9 +21,10 @@ import matplotlib.pyplot as plt
 import scipy
 from scipy import sparse
 
-from args import args
+
 from utils import *
 
+args = load_config('config/default.yml')
 sys.path.insert(0, '../src/')
 warnings.simplefilter('ignore')
 VOLUME_PATH = Path('/home/ykuv/pummel_data/')
