@@ -67,12 +67,6 @@ class RunningMean:
     def __str__(self):
         return str(self.value)
 
-@contextmanager
-def timer(name):
-    t0 = time.time()
-    yield
-    print(f'[{name}] done in {time.time() - t0:.0f} s')
-
 
 
 class Dict2Object:
