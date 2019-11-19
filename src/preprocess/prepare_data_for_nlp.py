@@ -44,13 +44,8 @@ assert len(input_years) > 0, "at least 1 input year needed"
 
 VOLUME_PATH = Path("/home/ykuv/pummel_data/volume/")
 
-df_basics = pd.read_csv(
-    VOLUME_PATH/Path(f"basics_norm_{all_years[0]}.csv"))
 
-for year in all_years[1:]:
-    df_basics = pd.concat([df_basics, pd.read_csv(
-            VOLUME_PATH/Path(f"basics_norm_{year}.csv")
-    )])
+df_basics = pd.concat([pd.read_csv(VOLUME_PATH/Path(f"basics_norm_{year}.csv")) for year in all_years])
 
 df_basics.sort_values(['krypht', 'ika'], ascending=False, inplace=True)
 logging.info(f"basics total rows before removing duplicates is {df_basics.shape[0]}")
