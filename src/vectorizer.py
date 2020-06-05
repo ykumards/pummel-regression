@@ -5,19 +5,18 @@ from sklearn.preprocessing import LabelEncoder
 from torch.utils.data import Dataset, DataLoader
 from vocab import SequenceVocabulary
 
-class EHRCountVectorizer():
+
+class EHRCountVectorizer:
     """
     Vectorizer to convert a sequence of ICD10 code to vectorized arrays
     In this specific instance, output is not a sequence. Look at MIMICVectorizer for
     a more general implementation with sequence as output as well.
     """
-    def __init__(
-            self, 
-            diagnoses_vocab: SequenceVocabulary
-    ):
+
+    def __init__(self, diagnoses_vocab: SequenceVocabulary):
         self.diagnoses_vocab = diagnoses_vocab
         self.diagnoses_vocab_len = len(self.diagnoses_vocab)
-        
+
     def vectorize(self, diagnoses: str):
         """
         Convert the diagnoses sequence to a list of indeces based on the
@@ -41,29 +40,28 @@ class EHRCountVectorizer():
         item_per_visit = []
         max_items_per_visit_length = 0
         for visit in visits:
-            items_per_visit_i = [self.diagnoses_vocab.lookup_token(token)
-                                 for token in visit.split(" ")]
+            items_per_visit_i = [
+                self.diagnoses_vocab.lookup_token(token) for token in visit.split(" ")
+            ]
             items_per_visit_i_length = len(items_per_visit_i)
-            if max_items_per_visit_length < items_per_visit_i_length: 
+            if max_items_per_visit_length < items_per_visit_i_length:
                 max_items_per_visit_length = items_per_visit_i_length
             item_per_visit.append(items_per_visit_i)
-            
-        item_per_visit_padded =\
-             np.zeros((patient_number_of_visits, 
-                       max_items_per_visit_length), 
-                      dtype=np.int64)
-        
+
+        item_per_visit_padded = np.zeros(
+            (patient_number_of_visits, max_items_per_visit_length), dtype=np.int64
+        )
+
         for i, visit in enumerate(item_per_visit):
-            item_per_visit_padded[i, :len(visit)] = visit
+            item_per_visit_padded[i, : len(visit)] = visit
 
         return item_per_visit, patient_number_of_visits
-    
+
     @classmethod
-    def from_dataframe(cls, df, colname='X_seq'):
+    def from_dataframe(cls, df, colname="X_seq"):
         diagnoses_vocab = SequenceVocabulary()
         for _, row in df.iterrows():
-            diagnoses_vocab.add_tokens(
-                row[f"{colname}"].replace(";", " ").split(" "))
+            diagnoses_vocab.add_tokens(row[f"{colname}"].replace(";", " ").split(" "))
 
         print(f"Corpus has {len(diagnoses_vocab)} unique tokens")
         return cls(diagnoses_vocab)
